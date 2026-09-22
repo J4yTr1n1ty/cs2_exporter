@@ -1,10 +1,23 @@
 # CS2 Prometheus exporter
 ### The goal of this project is to provide a simple way to get metrics from CS2 game servers and store them on Prometheus.
 
+## Metrics
+
+All metrics carry `ip` and `port` labels, so a single exporter instance can serve multiple servers without label collision.
+
+| Metric | Description |
+|---|---|
+| `cs2_frametime_ms` | Frame time in milliseconds |
+| `cs2_framecomputetime_ms` | Frame compute time in milliseconds |
+| `cs2_process_uptime` | Process uptime in seconds |
+| `cs2_build_version` | Build version |
+| `cs2_clients_human` | Number of human players |
+| `cs2_up` | 1 if the last scrape succeeded, 0 otherwise |
+
 ## How to install
 
 ### Method 1 : With docker
-`docker run -d -p <external port>:9591 --name cs2_exporter --restart=always ghcr.io/revij/cs2_exporter:latest`
+`docker run -d -p <external port>:9591 --name cs2_exporter --restart=always ghcr.io/j4ytr1n1ty/cs2_exporter:latest`
 
 ### Method 2 : Download sources and run
 

@@ -8,14 +8,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/revij/cs2_exporter.git"
+    "url": "git+https://github.com/J4yTr1n1ty/cs2_exporter.git"
   },
   "author": "Ioannis Karamperis <ioannis@fragnet.net>",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/revij/cs2_exporter/issues"
+    "url": "https://github.com/J4yTr1n1ty/cs2_exporter/issues"
   },
-  "homepage": "https://github.com/revij/cs2_exporter#readme",
+  "homepage": "https://github.com/J4yTr1n1ty/cs2_exporter#readme",
   "dependencies": {
     "@unyxos/working-rcon": "^0.2.10",
     "express": "^4.17.1",

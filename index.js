@@ -20,15 +20,20 @@ app.get('/metrics', validator.query(metricsParamsSchema), async (req, res) => {
         await client.disconnect();
 
         const statusJson = JSON.parse(statusJsonResponse);
+        const labels = { ip, port };
 
-        metrics.frametimeMs.set(statusJson.frametime_ms || 0);
-        metrics.framecomputetimeMs.set(statusJson.framecomputetime_ms || 0);
-        metrics.processUptime.set(statusJson.process_uptime || 0);
-        metrics.buildVersion.set(statusJson.build_version || 0);
-        metrics.clientsHuman.set(statusJson.server.clients_human || 0);
+        metrics.frametimeMs.set(labels, statusJson.frametime_ms || 0);
+        metrics.framecomputetimeMs.set(labels, statusJson.framecomputetime_ms || 0);
+        metrics.processUptime.set(labels, statusJson.process_uptime || 0);
+        metrics.buildVersion.set(labels, statusJson.build_version || 0);
+        metrics.clientsHuman.set(labels, statusJson.server.clients_human || 0);
+        metrics.up.set(labels, 1);
 
     } catch (err) {
         logger.error({ step: 'FETCH_METRICS', err: err.message }, 'error while fetching metrics from server');
+        // leave the other gauges at their last known value so a failed scrape doesn't
+        // zero out a graph — cs2_up is what should drive alerting on staleness
+        metrics.up.set({ ip, port }, 0);
     } finally {
         res.set('Content-Type', registry.contentType);
         res.end(registry.metrics());
