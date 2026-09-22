@@ -53,11 +53,10 @@ rcon_password "<password>"
 
 Add the following configuration to Prometheus static configuration :
 
-```
+```yaml
 - job_name: 'cs2_exporter'
     static_configs:
       - targets: ["<ip>:<port>:<rconpassword>"]
-
 
     relabel_configs:
       - source_labels: [__address__]
@@ -72,11 +71,15 @@ Add the following configuration to Prometheus static configuration :
         regex: ".+:.+:(.+)"
         replacement: "$1"
         target_label: __param_password
-      - source_labels: [__param_target]
-        target_label: instance
       - target_label: __address__
-        replacement: <IP>:<port> # Real exporter's IP:Port
+        replacement: <exporter-ip>:<exporter-port>
+
+    metric_relabel_configs:
+      - regex: "instance"
+        action: labeldrop
 ```
+
+The `instance` label is dropped because the exporter already stamps `ip` and `port` on every metric. Keeping it causes a label cross-product that multiplies your series count.
 
 ## How to access
 
