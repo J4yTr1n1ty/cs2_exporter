@@ -1,6 +1,12 @@
 # CS2 Prometheus exporter
 ### The goal of this project is to provide a simple way to get metrics from CS2 game servers and store them on Prometheus.
 
+## Dashboard
+
+![CS2 Servers Grafana Dashboard](docs/dashboard.png)
+
+Import `grafana-dashboard.json` via Grafana → Dashboards → Import.
+
 ## Metrics
 
 All metrics carry `ip` and `port` labels, so a single exporter instance can serve multiple servers without label collision.
