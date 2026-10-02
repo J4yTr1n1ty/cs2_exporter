@@ -19,11 +19,11 @@ app.get('/metrics', validator.query(metricsParamsSchema), async (req, res) => {
         const statusJsonResponse = await client.command('status_json');
         await client.disconnect();
 
-        // Sanitize: strip control characters, then fix unescaped quotes in name fields.
-        // Names are always followed by `"` then `}` as the last field in client objects.
+        // Player names can contain arbitrary characters that break JSON parsing.
+        // Names are unused in metrics, so strip the entire clients array before parsing.
         const cleaned = statusJsonResponse
             .replace(/[\x00-\x1F\x7F-\x9F]/g, '')
-            .replace(/"name":\s*"(.+?)"\s*\}/g, (match, name) => `"name": "${name.replace(/"/g, '')}"}`);
+            .replace(/"clients":\s*\[[\s\S]*?\],/, '"clients": [],');
         const statusJson = JSON.parse(cleaned);
         const labels = { ip, port };
 
