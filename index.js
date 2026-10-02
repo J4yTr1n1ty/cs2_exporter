@@ -19,7 +19,8 @@ app.get('/metrics', validator.query(metricsParamsSchema), async (req, res) => {
         const statusJsonResponse = await client.command('status_json');
         await client.disconnect();
 
-        const statusJson = JSON.parse(statusJsonResponse);
+        // Strip control characters from player names before parsing
+        const statusJson = JSON.parse(statusJsonResponse.replace(/[\x00-\x1F\x7F]/g, ''));
         const labels = { ip, port };
 
         metrics.frametimeMs.set(labels, statusJson.frametime_ms || 0);
