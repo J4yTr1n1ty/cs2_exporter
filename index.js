@@ -55,7 +55,7 @@ app.get('/metrics', validator.query(metricsParamsSchema), async (req, res) => {
         metrics.up.set({ ip, port }, 0);
     } finally {
         res.set('Content-Type', registry.contentType);
-        res.end(registry.metrics());
+        res.end(await registry.metrics());
     }
 });
 
