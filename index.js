@@ -23,11 +23,25 @@ app.get('/metrics', validator.query(metricsParamsSchema), async (req, res) => {
         const statusJson = JSON.parse(statusJsonResponse.replace(/[\x00-\x1F\x7F]/g, ''));
         const labels = { ip, port };
 
+        const srv = statusJson.server;
+
         metrics.frametimeMs.set(labels, statusJson.frametime_ms || 0);
         metrics.framecomputetimeMs.set(labels, statusJson.framecomputetime_ms || 0);
         metrics.processUptime.set(labels, statusJson.process_uptime || 0);
         metrics.buildVersion.set(labels, statusJson.build_version || 0);
-        metrics.clientsHuman.set(labels, statusJson.server.clients_human || 0);
+        metrics.memPhysAvailGb.set(labels, statusJson.mem_phys_avail_gb || 0);
+        metrics.clientsHuman.set(labels, srv.clients_human || 0);
+        metrics.clientsBot.set(labels, srv.clients_bot || 0);
+        metrics.cpuUsage.set(labels, srv.cpu_usage || 0);
+        metrics.hibernating.set(labels, srv.hibernating ? 1 : 0);
+        metrics.gcSession.set(labels, srv.gc_status === 'GCConnectionStatus_HAVE_SESSION' ? 1 : 0);
+        metrics.networkLossAvg.set(labels, srv.player_network_loss_avg || 0);
+        metrics.networkLossMax.set(labels, srv.player_network_loss_max || 0);
+        metrics.networkLagAvg.set(labels, srv.player_network_lag_avg || 0);
+        metrics.networkLagMax.set(labels, srv.player_network_lag_max || 0);
+        metrics.frameTime50th.set(labels, (srv.frame_time_50th_percentile || 0) * 1000);
+        metrics.frameTime95th.set(labels, (srv.frame_time_95th_percentile || 0) * 1000);
+        metrics.frameTimeMax.set(labels, (srv.frame_time_max || 0) * 1000);
         metrics.up.set(labels, 1);
 
     } catch (err) {

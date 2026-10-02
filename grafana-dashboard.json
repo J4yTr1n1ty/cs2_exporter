@@ -132,6 +132,44 @@
             ]
           },
           {
+            "matcher": { "id": "byName", "options": "Hibernating" },
+            "properties": [
+              { "id": "custom.displayMode", "value": "color-background" },
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "type": "value",
+                    "options": {
+                      "0": { "color": "green", "index": 0, "text": "Active" },
+                      "1": { "color": "blue",  "index": 1, "text": "Hibernating" }
+                    }
+                  }
+                ]
+              },
+              { "id": "custom.width", "value": 110 }
+            ]
+          },
+          {
+            "matcher": { "id": "byName", "options": "GC Session" },
+            "properties": [
+              { "id": "custom.displayMode", "value": "color-background" },
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "type": "value",
+                    "options": {
+                      "0": { "color": "red",   "index": 0, "text": "NO SESSION" },
+                      "1": { "color": "green", "index": 1, "text": "OK" }
+                    }
+                  }
+                ]
+              },
+              { "id": "custom.width", "value": 100 }
+            ]
+          },
+          {
             "matcher": { "id": "byName", "options": "Port" },
             "properties": [
               { "id": "unit", "value": "none" },
@@ -144,7 +182,31 @@
             "properties": [
               { "id": "unit", "value": "none" },
               { "id": "decimals", "value": 0 },
+              { "id": "custom.width", "value": 70 }
+            ]
+          },
+          {
+            "matcher": { "id": "byName", "options": "Bots" },
+            "properties": [
+              { "id": "unit", "value": "none" },
+              { "id": "decimals", "value": 0 },
+              { "id": "custom.width", "value": 60 }
+            ]
+          },
+          {
+            "matcher": { "id": "byName", "options": "CPU %" },
+            "properties": [
+              { "id": "unit", "value": "percent" },
+              { "id": "decimals", "value": 1 },
               { "id": "custom.width", "value": 80 }
+            ]
+          },
+          {
+            "matcher": { "id": "byName", "options": "Mem Avail (GB)" },
+            "properties": [
+              { "id": "unit", "value": "none" },
+              { "id": "decimals", "value": 1 },
+              { "id": "custom.width", "value": 110 }
             ]
           },
           {
@@ -205,7 +267,7 @@
         },
         {
           "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
-          "expr": "last_over_time(cs2_frametime_ms{ip=~\"$ip\", port=~\"$port\"}[$__range])",
+          "expr": "last_over_time(cs2_clients_bot{ip=~\"$ip\", port=~\"$port\"}[$__range])",
           "instant": true,
           "legendFormat": "{{ip}}:{{port}}",
           "refId": "C",
@@ -213,7 +275,7 @@
         },
         {
           "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
-          "expr": "last_over_time(cs2_framecomputetime_ms{ip=~\"$ip\", port=~\"$port\"}[$__range])",
+          "expr": "last_over_time(cs2_cpu_usage{ip=~\"$ip\", port=~\"$port\"}[$__range])",
           "instant": true,
           "legendFormat": "{{ip}}:{{port}}",
           "refId": "D",
@@ -221,7 +283,7 @@
         },
         {
           "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
-          "expr": "last_over_time(cs2_process_uptime{ip=~\"$ip\", port=~\"$port\"}[$__range])",
+          "expr": "last_over_time(cs2_mem_phys_avail_gb{ip=~\"$ip\", port=~\"$port\"}[$__range])",
           "instant": true,
           "legendFormat": "{{ip}}:{{port}}",
           "refId": "E",
@@ -229,10 +291,50 @@
         },
         {
           "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
-          "expr": "last_over_time(cs2_build_version{ip=~\"$ip\", port=~\"$port\"}[$__range])",
+          "expr": "last_over_time(cs2_hibernating{ip=~\"$ip\", port=~\"$port\"}[$__range])",
           "instant": true,
           "legendFormat": "{{ip}}:{{port}}",
           "refId": "F",
+          "format": "time_series"
+        },
+        {
+          "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+          "expr": "last_over_time(cs2_gc_session{ip=~\"$ip\", port=~\"$port\"}[$__range])",
+          "instant": true,
+          "legendFormat": "{{ip}}:{{port}}",
+          "refId": "G",
+          "format": "time_series"
+        },
+        {
+          "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+          "expr": "last_over_time(cs2_frametime_ms{ip=~\"$ip\", port=~\"$port\"}[$__range])",
+          "instant": true,
+          "legendFormat": "{{ip}}:{{port}}",
+          "refId": "H",
+          "format": "time_series"
+        },
+        {
+          "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+          "expr": "last_over_time(cs2_framecomputetime_ms{ip=~\"$ip\", port=~\"$port\"}[$__range])",
+          "instant": true,
+          "legendFormat": "{{ip}}:{{port}}",
+          "refId": "I",
+          "format": "time_series"
+        },
+        {
+          "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+          "expr": "last_over_time(cs2_process_uptime{ip=~\"$ip\", port=~\"$port\"}[$__range])",
+          "instant": true,
+          "legendFormat": "{{ip}}:{{port}}",
+          "refId": "J",
+          "format": "time_series"
+        },
+        {
+          "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+          "expr": "last_over_time(cs2_build_version{ip=~\"$ip\", port=~\"$port\"}[$__range])",
+          "instant": true,
+          "legendFormat": "{{ip}}:{{port}}",
+          "refId": "K",
           "format": "time_series"
         }
       ],
@@ -253,6 +355,11 @@
               "port": "Port",
               "cs2_up": "Status",
               "cs2_clients_human": "Players",
+              "cs2_clients_bot": "Bots",
+              "cs2_cpu_usage": "CPU %",
+              "cs2_mem_phys_avail_gb": "Mem Avail (GB)",
+              "cs2_hibernating": "Hibernating",
+              "cs2_gc_session": "GC Session",
               "cs2_frametime_ms": "Frametime (ms)",
               "cs2_framecomputetime_ms": "Compute (ms)",
               "cs2_process_uptime": "Uptime (s)",
@@ -260,6 +367,21 @@
             },
             "excludeByName": {
               "Time": true
+            },
+            "indexByName": {
+              "IP": 0,
+              "Port": 1,
+              "Status": 2,
+              "Hibernating": 3,
+              "GC Session": 4,
+              "Players": 5,
+              "Bots": 6,
+              "CPU %": 7,
+              "Mem Avail (GB)": 8,
+              "Frametime (ms)": 9,
+              "Compute (ms)": 10,
+              "Uptime (s)": 11,
+              "Build": 12
             }
           }
         }
@@ -268,7 +390,7 @@
     },
     {
       "collapsed": false,
-      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 21 },
+      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 18 },
       "id": 101,
       "title": "Player Counts",
       "type": "row"
@@ -284,13 +406,13 @@
         },
         "overrides": []
       },
-      "gridPos": { "h": 8, "w": 24, "x": 0, "y": 22 },
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 19 },
       "id": 4,
       "options": {
         "legend": { "calcs": ["lastNotNull", "max"], "displayMode": "table", "placement": "right" },
         "tooltip": { "mode": "multi" }
       },
-      "title": "Players over Time",
+      "title": "Human Players over Time",
       "targets": [
         {
           "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
@@ -302,8 +424,36 @@
       "type": "timeseries"
     },
     {
+      "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "palette-classic" },
+          "custom": { "lineWidth": 2, "fillOpacity": 10 },
+          "unit": "short",
+          "min": 0
+        },
+        "overrides": []
+      },
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 19 },
+      "id": 14,
+      "options": {
+        "legend": { "calcs": ["lastNotNull", "max"], "displayMode": "table", "placement": "right" },
+        "tooltip": { "mode": "multi" }
+      },
+      "title": "Bot Players over Time",
+      "targets": [
+        {
+          "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+          "expr": "cs2_clients_bot{ip=~\"$ip\", port=~\"$port\"}",
+          "legendFormat": "{{ip}}:{{port}}",
+          "refId": "A"
+        }
+      ],
+      "type": "timeseries"
+    },
+    {
       "collapsed": false,
-      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 30 },
+      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 27 },
       "id": 102,
       "title": "Performance",
       "type": "row"
@@ -319,7 +469,7 @@
         },
         "overrides": []
       },
-      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 31 },
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 28 },
       "id": 5,
       "options": {
         "legend": { "calcs": ["lastNotNull", "mean"], "displayMode": "table", "placement": "right" },
@@ -347,7 +497,7 @@
         },
         "overrides": []
       },
-      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 31 },
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 28 },
       "id": 6,
       "options": {
         "legend": { "calcs": ["lastNotNull", "mean"], "displayMode": "table", "placement": "right" },
@@ -365,8 +515,48 @@
       "type": "timeseries"
     },
     {
+      "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "palette-classic" },
+          "custom": { "lineWidth": 1, "fillOpacity": 5 },
+          "unit": "ms",
+          "min": 0
+        },
+        "overrides": []
+      },
+      "gridPos": { "h": 8, "w": 24, "x": 0, "y": 36 },
+      "id": 15,
+      "options": {
+        "legend": { "calcs": ["lastNotNull", "mean", "max"], "displayMode": "table", "placement": "right" },
+        "tooltip": { "mode": "multi" }
+      },
+      "title": "Frame Time Percentiles",
+      "targets": [
+        {
+          "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+          "expr": "cs2_frame_time_50th_percentile_ms{ip=~\"$ip\", port=~\"$port\"}",
+          "legendFormat": "p50 {{ip}}:{{port}}",
+          "refId": "A"
+        },
+        {
+          "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+          "expr": "cs2_frame_time_95th_percentile_ms{ip=~\"$ip\", port=~\"$port\"}",
+          "legendFormat": "p95 {{ip}}:{{port}}",
+          "refId": "B"
+        },
+        {
+          "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+          "expr": "cs2_frame_time_max_ms{ip=~\"$ip\", port=~\"$port\"}",
+          "legendFormat": "max {{ip}}:{{port}}",
+          "refId": "C"
+        }
+      ],
+      "type": "timeseries"
+    },
+    {
       "collapsed": false,
-      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 39 },
+      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 44 },
       "id": 103,
       "title": "Process Info",
       "type": "row"
@@ -382,7 +572,7 @@
         },
         "overrides": []
       },
-      "gridPos": { "h": 8, "w": 24, "x": 0, "y": 40 },
+      "gridPos": { "h": 8, "w": 24, "x": 0, "y": 45 },
       "id": 7,
       "options": {
         "legend": { "calcs": ["lastNotNull"], "displayMode": "table", "placement": "right" },
@@ -398,6 +588,245 @@
         }
       ],
       "type": "timeseries"
+    },
+    {
+      "collapsed": true,
+      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 53 },
+      "id": 104,
+      "title": "Network",
+      "type": "row",
+      "panels": [
+        {
+          "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+          "fieldConfig": {
+            "defaults": {
+              "color": { "mode": "palette-classic" },
+              "custom": { "lineWidth": 1, "fillOpacity": 5 },
+              "unit": "ms",
+              "min": 0
+            },
+            "overrides": []
+          },
+          "gridPos": { "h": 8, "w": 12, "x": 0, "y": 54 },
+          "id": 16,
+          "options": {
+            "legend": { "calcs": ["lastNotNull", "max"], "displayMode": "table", "placement": "right" },
+            "tooltip": { "mode": "multi" }
+          },
+          "title": "Player Network Lag",
+          "targets": [
+            {
+              "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+              "expr": "cs2_network_lag_avg_ms{ip=~\"$ip\", port=~\"$port\"}",
+              "legendFormat": "avg {{ip}}:{{port}}",
+              "refId": "A"
+            },
+            {
+              "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+              "expr": "cs2_network_lag_max_ms{ip=~\"$ip\", port=~\"$port\"}",
+              "legendFormat": "max {{ip}}:{{port}}",
+              "refId": "B"
+            }
+          ],
+          "type": "timeseries"
+        },
+        {
+          "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+          "fieldConfig": {
+            "defaults": {
+              "color": { "mode": "palette-classic" },
+              "custom": { "lineWidth": 1, "fillOpacity": 5 },
+              "unit": "percentunit",
+              "min": 0,
+              "max": 1
+            },
+            "overrides": []
+          },
+          "gridPos": { "h": 8, "w": 12, "x": 12, "y": 54 },
+          "id": 17,
+          "options": {
+            "legend": { "calcs": ["lastNotNull", "max"], "displayMode": "table", "placement": "right" },
+            "tooltip": { "mode": "multi" }
+          },
+          "title": "Player Network Packet Loss",
+          "targets": [
+            {
+              "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+              "expr": "cs2_network_loss_avg{ip=~\"$ip\", port=~\"$port\"}",
+              "legendFormat": "avg {{ip}}:{{port}}",
+              "refId": "A"
+            },
+            {
+              "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+              "expr": "cs2_network_loss_max{ip=~\"$ip\", port=~\"$port\"}",
+              "legendFormat": "max {{ip}}:{{port}}",
+              "refId": "B"
+            }
+          ],
+          "type": "timeseries"
+        }
+      ]
+    },
+    {
+      "collapsed": true,
+      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 54 },
+      "id": 105,
+      "title": "System",
+      "type": "row",
+      "panels": [
+        {
+          "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+          "fieldConfig": {
+            "defaults": {
+              "color": { "mode": "palette-classic" },
+              "custom": { "lineWidth": 1, "fillOpacity": 5 },
+              "unit": "percent",
+              "min": 0
+            },
+            "overrides": []
+          },
+          "gridPos": { "h": 8, "w": 12, "x": 0, "y": 55 },
+          "id": 18,
+          "options": {
+            "legend": { "calcs": ["lastNotNull", "mean", "max"], "displayMode": "table", "placement": "right" },
+            "tooltip": { "mode": "multi" }
+          },
+          "title": "CPU Usage",
+          "targets": [
+            {
+              "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+              "expr": "cs2_cpu_usage{ip=~\"$ip\", port=~\"$port\"}",
+              "legendFormat": "{{ip}}:{{port}}",
+              "refId": "A"
+            }
+          ],
+          "type": "timeseries"
+        },
+        {
+          "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+          "fieldConfig": {
+            "defaults": {
+              "color": { "mode": "palette-classic" },
+              "custom": { "lineWidth": 1, "fillOpacity": 5 },
+              "unit": "decgbytes",
+              "min": 0
+            },
+            "overrides": []
+          },
+          "gridPos": { "h": 8, "w": 12, "x": 12, "y": 55 },
+          "id": 19,
+          "options": {
+            "legend": { "calcs": ["lastNotNull", "min"], "displayMode": "table", "placement": "right" },
+            "tooltip": { "mode": "multi" }
+          },
+          "title": "Available Physical Memory",
+          "targets": [
+            {
+              "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+              "expr": "cs2_mem_phys_avail_gb{ip=~\"$ip\", port=~\"$port\"}",
+              "legendFormat": "{{ip}}:{{port}}",
+              "refId": "A"
+            }
+          ],
+          "type": "timeseries"
+        },
+        {
+          "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+          "fieldConfig": {
+            "defaults": {
+              "color": { "mode": "thresholds" },
+              "mappings": [
+                {
+                  "type": "value",
+                  "options": {
+                    "0": { "color": "blue", "index": 0, "text": "Hibernating" },
+                    "1": { "color": "green", "index": 1, "text": "Active" }
+                  }
+                }
+              ],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  { "color": "blue", "value": null },
+                  { "color": "green", "value": 1 }
+                ]
+              },
+              "unit": "short"
+            },
+            "overrides": []
+          },
+          "gridPos": { "h": 3, "w": 12, "x": 0, "y": 63 },
+          "id": 20,
+          "options": {
+            "colorMode": "background",
+            "graphMode": "none",
+            "justifyMode": "center",
+            "orientation": "auto",
+            "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false },
+            "textMode": "auto",
+            "wideLayout": true
+          },
+          "title": "Hibernation State",
+          "targets": [
+            {
+              "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+              "expr": "last_over_time(cs2_hibernating{ip=~\"$ip\", port=~\"$port\"}[$__range])",
+              "instant": true,
+              "legendFormat": "{{ip}}:{{port}}",
+              "refId": "A"
+            }
+          ],
+          "type": "stat"
+        },
+        {
+          "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+          "fieldConfig": {
+            "defaults": {
+              "color": { "mode": "thresholds" },
+              "mappings": [
+                {
+                  "type": "value",
+                  "options": {
+                    "0": { "color": "red",   "index": 0, "text": "NO SESSION" },
+                    "1": { "color": "green", "index": 1, "text": "OK" }
+                  }
+                }
+              ],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  { "color": "red",   "value": null },
+                  { "color": "green", "value": 1 }
+                ]
+              },
+              "unit": "short"
+            },
+            "overrides": []
+          },
+          "gridPos": { "h": 3, "w": 12, "x": 12, "y": 63 },
+          "id": 21,
+          "options": {
+            "colorMode": "background",
+            "graphMode": "none",
+            "justifyMode": "center",
+            "orientation": "auto",
+            "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false },
+            "textMode": "auto",
+            "wideLayout": true
+          },
+          "title": "GC Session",
+          "targets": [
+            {
+              "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+              "expr": "last_over_time(cs2_gc_session{ip=~\"$ip\", port=~\"$port\"}[$__range])",
+              "instant": true,
+              "legendFormat": "{{ip}}:{{port}}",
+              "refId": "A"
+            }
+          ],
+          "type": "stat"
+        }
+      ]
     }
   ],
   "refresh": "30s",
@@ -451,5 +880,5 @@
   "timezone": "browser",
   "title": "CS2 Servers",
   "uid": "cs2-servers",
-  "version": 2
+  "version": 3
 }
